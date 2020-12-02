@@ -48,6 +48,7 @@ defmodule TheRush.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:norm, "~> 0.12"},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
