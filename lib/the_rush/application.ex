@@ -14,7 +14,7 @@ defmodule TheRush.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: TheRush.PubSub},
       # Start the Endpoint (http/https)
-      TheRushWeb.Endpoint
+      TheRushWeb.Endpoint,
       # Start a worker by calling: TheRush.Worker.start_link(arg)
       # {TheRush.Worker, arg}
     ]

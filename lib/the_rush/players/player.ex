@@ -1,96 +1,68 @@
 defmodule TheRush.Players.Player do
-  defstruct [
-    player: "",
-    team: "",
-    position: "",
-    attempts: 0,
-    attempts_per_game: 0,
-    yards_total: 0,
-    yards_per_game: 0,
-    touchdowns: 0,
-    longest_rush: "",
-    first_downs: 0,
-    first_downs_percentage: 0,
-    yards_20: 0,
-    yards_40: 0,
-    fumbles: 0
-  ]
-
-  alias __MODULE__
-
-  import Norm
+  @moduledoc """
+  Player schema
+  """
+  use Ecto.Schema
+  import Ecto.{Changeset, Query}
   import TheRush.Helpers
 
-  require Logger
+  @all_fields ~w{
+    name
+    position
+    team
+    attempts
+    attempts_per_game
+    rushing_average
+    yards_total
+    yards_per_game
+    touchdowns
+    longest_rush_value
+    longest_rush_touchdown
+    first_downs
+    first_downs_percentage
+    yards_20
+    yards_40
+    fumbles
+  }a
 
-  @type t :: %__MODULE__{
-    player: String.t(),
-    team: String.t(),
-    position: String.t(),
-    attempts: integer(),
-    attempts_per_game: float() | integer(),
-    yards_total: integer(),
-    yards_per_game: float() | integer(),
-    touchdowns: integer(),
-    longest_rush: map(),
-    first_downs: integer(),
-    first_downs_percentage: float() | integer(),
-    yards_20: integer(),
-    yards_40: integer(),
-    fumbles: integer()
-  }
-
-  @doc """
-  Schema for Player
-  """
-  def _s do
-    schema(%{
-      player: spec(is_binary()),
-      team: spec(is_binary()),
-      position: spec(is_binary()),
-      attempts: spec(valid_integer?()),
-      attempts_per_game: spec(is_float() or valid_integer?()),
-      yards_total: spec(valid_integer?()),
-      yards_per_game: spec(is_float() or valid_integer?()),
-      touchdowns: spec(is_float() or valid_integer?()),
-      longest_rush: schema(%{
-        value: spec(is_integer()),
-        touchdown: spec(is_boolean())
-      }),
-      first_downs: spec(valid_integer?()),
-      first_downs_percentage: spec(is_float() or valid_integer?()),
-      yards_20: spec(valid_integer?()),
-      yards_40: spec(valid_integer?()),
-      fumbles: spec(valid_integer?())
-    })
+  schema "players" do
+     field :name, :string
+     field :position, :string
+     field :team, :string
+     field :attempts, :integer
+     field :attempts_per_game, :float
+     field :rushing_average, :float
+     field :yards_total, :integer
+     field :yards_per_game, :float
+     field :touchdowns, :integer
+     field :longest_rush_value, :integer
+     field :longest_rush_touchdown, :boolean
+     field :first_downs, :integer
+     field :first_downs_percentage, :float
+     field :yards_20, :integer
+     field :yards_40, :integer
+     field :fumbles, :integer
+     
+    timestamps()
   end
 
-  @doc """
-  Returns a new struct with optional params
-  """
-  @spec new(map()) :: Player.t()
-  def new(params \\ %{}) do
-    %Player{}
-    |> Map.merge(params)
+  @doc false
+  def changeset(player, attrs) do
+    player
+    |> cast(attrs, @all_fields)
+    |> validate_required(@all_fields)
   end
 
-  @doc """
-  Validates a map against the expected schema contract.
-  """
-  @spec validate_input(any()) :: {:ok, map()} | {:error, String.t()} | {:error, [map()]}
-  def validate_input(entry) when is_map(entry) do
-    case conform(entry, _s()) do
-      {:ok, _conformed} = valid_entry ->
-        valid_entry
-      {:error, conform_error} = error ->
-        Logger.warn("TheRush.Players.Player.validate_input/1 received an invalid entry format #{inspect conform_error}")
-        error
-    end
+  @doc false
+  def sort(query, sort_by, sort_order \\ :asc) do
+    from q in query,
+      order_by: [{^sort_order, ^sort_by}]
   end
 
-  def validate_input(entry) do
-    Logger.warn("TheRush.Players.Player.validate_input/1 received invalid data: #{inspect entry}")
-    {:error, "Invalid data"}
+  @doc false
+  def paginate(query, page \\ 0, per_page \\ 30) do
+    from q in query,
+      offset: ^((page - 1) * per_page),
+      limit: ^per_page
   end
-
 end
