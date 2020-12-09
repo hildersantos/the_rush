@@ -20,74 +20,29 @@
       </tr>
     </thead>
     <tbody>
+      <%= for player <- @players do %>
       <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
+        <td class="border border-blue-600"><%= player.name %></td>
+        <td class="border border-blue-600"><%= player.team %></td>
+        <td class="border border-blue-600"><%= player.position %></td>
+        <td class="border border-blue-600"><%= player.attempts %></td>
+        <td class="border border-blue-600"><%= player.attempts_per_game %></td>
+        <td class="border border-blue-600"><%= player.yards_total %></td>
+        <td class="border border-blue-600"><%= player.rushing_average %></td>
+        <td class="border border-blue-600"><%= player.yards_per_game %></td>
+        <td class="border border-blue-600"><%= player.touchdowns %></td>
+        <td class="border border-blue-600"><%= player.longest_rush_value %><%= if player.longest_rush_touchdown, do: "T" %></td>
+        <td class="border border-blue-600"><%= player.first_downs %></td>
+        <td class="border border-blue-600"><%= player.first_downs_percentage %></td>
+        <td class="border border-blue-600"><%= player.yards_20 %></td>
+        <td class="border border-blue-600"><%= player.yards_40 %></td>
+        <td class="border border-blue-600"><%= player.fumbles %></td>
       </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
+    <% end %>
     </tbody>
   </table>
+  <div class="pagination">
+    <%= live_patch "Next Page", to: Routes.live_path(@socket, __MODULE__, page: @options.page + 1)
+  %>
+  </div>
 </section>
