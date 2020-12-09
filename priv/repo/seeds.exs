@@ -9,3 +9,15 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias TheRush.Players
+alias TheRush.Players.Player
+alias TheRush.Repo
+
+Repo.delete_all(Player)
+
+Players.build_list()
+|> Enum.each(fn params ->
+  struct(Player, params)
+  |> Repo.insert!()
+end)
