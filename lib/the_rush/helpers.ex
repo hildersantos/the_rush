@@ -30,7 +30,14 @@ defmodule TheRush.Helpers do
 
     build_longest_rush_map(converted)
   end
+
+  def convert_longest_rush(value) when is_integer(value) or is_float(value) do
+    build_longest_rush_map([value])
+  end
+
   def convert_longest_rush(_), do: nil
+
+  def convert_to_float(number), do: number / 1
 
   defp build_longest_rush_map([value]) do
     %{
