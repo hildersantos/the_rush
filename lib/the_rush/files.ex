@@ -9,8 +9,7 @@ defmodule TheRush.Files do
   Handles JSON files
   """
   def fetch_json(filename) do
-    path = 
-      "#{File.cwd!()}/priv/support_files/#{filename}"
+    path = "#{File.cwd!()}/priv/support_files/#{filename}"
 
     path
     |> File.stream!()

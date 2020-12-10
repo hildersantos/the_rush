@@ -26,23 +26,23 @@ defmodule TheRush.Players.Player do
   }a
 
   schema "players" do
-     field :name, :string
-     field :position, :string
-     field :team, :string
-     field :attempts, :integer
-     field :attempts_per_game, :float
-     field :rushing_average, :float
-     field :yards_total, :integer
-     field :yards_per_game, :float
-     field :touchdowns, :integer
-     field :longest_rush_value, :integer
-     field :longest_rush_touchdown, :boolean
-     field :first_downs, :integer
-     field :first_downs_percentage, :float
-     field :yards_20, :integer
-     field :yards_40, :integer
-     field :fumbles, :integer
-     
+    field :name, :string
+    field :position, :string
+    field :team, :string
+    field :attempts, :integer
+    field :attempts_per_game, :float
+    field :rushing_average, :float
+    field :yards_total, :integer
+    field :yards_per_game, :float
+    field :touchdowns, :integer
+    field :longest_rush_value, :integer
+    field :longest_rush_touchdown, :boolean
+    field :first_downs, :integer
+    field :first_downs_percentage, :float
+    field :yards_20, :integer
+    field :yards_40, :integer
+    field :fumbles, :integer
+
     timestamps()
   end
 

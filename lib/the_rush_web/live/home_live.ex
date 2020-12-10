@@ -1,4 +1,7 @@
 defmodule TheRushWeb.HomeLive do
+  @moduledoc """
+  Module responsible for entries' table user interface.
+  """
   use TheRushWeb, :live_view
 
   @impl true
@@ -8,6 +11,7 @@ defmodule TheRushWeb.HomeLive do
       search_query: "",
       sort_by: nil
     ]
+
     {:ok, assign(socket, assigns)}
   end
 end
