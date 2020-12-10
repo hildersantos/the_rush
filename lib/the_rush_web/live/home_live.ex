@@ -16,10 +16,11 @@ defmodule TheRushWeb.HomeLive do
 
     assigns = [
       options: Map.merge(pagination_opts, sort_opts),
-      players: Players.all(
-        pagination: pagination_opts,
-        sort: sort_opts
-      )
+      players:
+        Players.all(
+          pagination: pagination_opts,
+          sort: sort_opts
+        )
     ]
 
     {:ok, assign(socket, assigns), temporary_assigns: [players: []]}
@@ -37,10 +38,11 @@ defmodule TheRushWeb.HomeLive do
 
     assigns = [
       options: Map.merge(pagination_opts, sort_opts),
-      players: Players.all(
-        pagination: pagination_opts,
-        sort: sort_opts
-      )
+      players:
+        Players.all(
+          pagination: pagination_opts,
+          sort: sort_opts
+        )
     ]
 
     {:noreply, assign(socket, assigns)}
