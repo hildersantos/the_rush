@@ -48,7 +48,8 @@ defmodule TheRush.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:norm, "~> 0.12"},
-      {:mox, "~> 1.0", only: :test}
+      {:mox, "~> 1.0", only: :test},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
     ]
   end
 
