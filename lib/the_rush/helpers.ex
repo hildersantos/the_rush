@@ -4,11 +4,12 @@ defmodule TheRush.Helpers do
   """
 
   def valid_integer?(input) do
-    convert_to_integer(input) && true || false
+    (convert_to_integer(input) && true) || false
   end
 
   def convert_to_integer(input) when is_binary(input) do
     input = String.replace(input, ",", "")
+
     try do
       String.to_integer(input)
     rescue
@@ -19,14 +20,16 @@ defmodule TheRush.Helpers do
         integer
     end
   end
+
   def convert_to_integer(input) when is_integer(input), do: input
   def convert_to_integer(_), do: nil
 
   def convert_longest_rush(value) when is_binary(value) do
-    converted = Regex.split(~r/T/, value,
-      include_captures: true,
-      trim: true
-    )
+    converted =
+      Regex.split(~r/T/, value,
+        include_captures: true,
+        trim: true
+      )
 
     build_longest_rush_map(converted)
   end
@@ -52,5 +55,6 @@ defmodule TheRush.Helpers do
       touchdown: true
     }
   end
+
   defp build_longest_rush_map(_), do: nil
 end

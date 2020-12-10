@@ -6,7 +6,9 @@ defmodule TheRush.Players do
 
   alias TheRush.Players.Player
   alias TheRush.Repo
-  import TheRush.Helpers, only: [convert_longest_rush: 1, convert_to_integer: 1, convert_to_float: 1]
+
+  import TheRush.Helpers,
+    only: [convert_longest_rush: 1, convert_to_integer: 1, convert_to_float: 1]
 
   @doc """
   Creates a new player.
@@ -24,11 +26,11 @@ defmodule TheRush.Players do
     Enum.reduce(criteria, Player, fn
       {:pagination, %{page: page, per_page: per_page}}, query ->
         Player.paginate(query, page, per_page)
+
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         Player.sort(query, sort_by, sort_order)
-    end
-      )
-      |> Repo.all()
+    end)
+    |> Repo.all()
   end
 
   @doc """
@@ -40,7 +42,7 @@ defmodule TheRush.Players do
     |> Enum.reject(&(&1 == %{}))
   end
 
-  defp fetch_json() do
+  defp fetch_json do
     files().fetch_json(@json_file)
   end
 
@@ -67,7 +69,7 @@ defmodule TheRush.Players do
       first_downs_percentage: convert_to_float(json_entry["1st%"]),
       yards_20: convert_to_integer(json_entry["20+"]),
       yards_40: convert_to_integer(json_entry["40+"]),
-      fumbles: convert_to_integer(json_entry["FUM"]),
+      fumbles: convert_to_integer(json_entry["FUM"])
     }
   end
 
