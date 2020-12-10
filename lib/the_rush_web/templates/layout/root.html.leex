@@ -10,11 +10,13 @@
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
-    <header>
-      <section class="container mx-auto">
-        <h1 class="font-serif text-4xl font-bold">theRush</h1>
-      </section>
-    </header>
-    <%= @inner_content %>
+    <div class="antialiased bg-gray-200 pt-10 pb-20">
+      <header>
+        <div class="container mx-auto pb-10">
+          <h1 class="text-4xl text-center text-gray-700 font-bold">theRush</h1>
+        </div>
+      </header>
+      <%= @inner_content %>
+    </div>
   </body>
 </html>
