@@ -65,4 +65,21 @@ defmodule TheRush.Players.Player do
       offset: ^((page - 1) * per_page),
       limit: ^per_page
   end
+
+  @doc false
+  def filter_by_name(query, search_query) do
+    search_query = prepare_input(search_query)
+
+    from q in query,
+      where: ilike(q.name, ^search_query)
+  end
+
+  defp prepare_input(input) do
+    text =
+      input
+      |> String.replace("%", "\\%")
+      |> String.replace("_", "\\_")
+
+    "%" <> text <> "%"
+  end
 end

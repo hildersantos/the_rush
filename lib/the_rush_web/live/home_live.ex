@@ -6,7 +6,9 @@ defmodule TheRushWeb.HomeLive do
 
   alias TheRush.Players
 
-  @per_page 20
+  @per_page 50
+  # Set a default timeout for the debouncer function, in ms
+  @debouncer_timeout 500
 
   @impl true
   def mount(_params, _session, socket) do
@@ -20,10 +22,60 @@ defmodule TheRushWeb.HomeLive do
         Players.all(
           pagination: pagination_opts,
           sort: sort_opts
-        )
+        ),
+      filter_by_name: %{
+        query: nil,
+        debouncer_reference: nil
+      }
     ]
 
-    {:ok, assign(socket, assigns), temporary_assigns: [players: []]}
+    {:ok, assign(socket, assigns), temporary_assigns: [players: nil]}
+  end
+
+  @impl true
+  def handle_event("filter_by_name", %{"query" => query}, socket) do
+    # Let's store the query in the socket, so we can use it later
+    # when the debouncer timer finishes
+    query = String.trim(query)
+    socket = assign(socket, :filter_by_name, %{socket.assigns.filter_by_name | query: query})
+
+    # Store the timeout in the socket
+    debouncer_reference = socket.assigns.filter_by_name.debouncer_reference
+
+    # Cancel the timer if exists
+    if not is_nil(debouncer_reference) do
+      Process.cancel_timer(debouncer_reference)
+    end
+
+    # Assigns a reference to the timer in the socket
+    socket =
+      assign(socket, :filter_by_name, %{
+        socket.assigns.filter_by_name
+        | debouncer_reference: Process.send_after(self(), :filter_table, @debouncer_timeout)
+      })
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:filter_table, socket) do
+    # Filter table based on filter_by_name.query
+    options = socket.assigns.options
+    pagination_opts = %{page: options.page, per_page: options.per_page}
+    sort_opts = %{sort_by: options.sort_by, sort_order: options.sort_order}
+
+    socket =
+      assign(
+        socket,
+        :players,
+        Players.all(
+          pagination: pagination_opts,
+          sort: sort_opts,
+          filter_by_name: socket.assigns.filter_by_name.query
+        )
+      )
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -41,7 +93,8 @@ defmodule TheRushWeb.HomeLive do
       players:
         Players.all(
           pagination: pagination_opts,
-          sort: sort_opts
+          sort: sort_opts,
+          filter_by_name: socket.assigns.filter_by_name.query
         )
     ]
 
