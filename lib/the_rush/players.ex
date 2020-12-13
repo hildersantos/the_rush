@@ -29,6 +29,15 @@ defmodule TheRush.Players do
 
       {:sort, %{sort_by: sort_by, sort_order: sort_order}}, query ->
         Player.sort(query, sort_by, sort_order)
+
+      {:filter_by_name, nil}, query ->
+        query
+
+      {:filter_by_name, ""}, query ->
+        query
+
+      {:filter_by_name, search_query}, query ->
+        Player.filter_by_name(query, search_query)
     end)
     |> Repo.all()
   end

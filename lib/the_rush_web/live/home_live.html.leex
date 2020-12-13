@@ -1,93 +1,60 @@
 <section class="container mx-auto">
-  <table class="border-collapse border border-blue-800 w-full">
-    <thead>
-      <tr>
-        <th class="border border-blue-600">Player</th>
-        <th class="border border-blue-600">Team</th>
-        <th class="border border-blue-600">Pos</th>
-        <th class="border border-blue-600">Att</th>
-        <th class="border border-blue-600">Att/G</th>
-        <th class="border border-blue-600">Yds</th>
-        <th class="border border-blue-600">Avg</th>
-        <th class="border border-blue-600">Yds/G</th>
-        <th class="border border-blue-600">TD</th>
-        <th class="border border-blue-600">Lng</th>
-        <th class="border border-blue-600">1st</th>
-        <th class="border border-blue-600">1st%</th>
-        <th class="border border-blue-600">20+</th>
-        <th class="border border-blue-600">40+</th>
-        <th class="border border-blue-600">FUM</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-      <tr>
-        <td class="border border-blue-600">Player</td>
-        <td class="border border-blue-600">Team</td>
-        <td class="border border-blue-600">Pos</td>
-        <td class="border border-blue-600">Att</td>
-        <td class="border border-blue-600">Att/G</td>
-        <td class="border border-blue-600">Yds</td>
-        <td class="border border-blue-600">Avg</td>
-        <td class="border border-blue-600">Yds/G</td>
-        <td class="border border-blue-600">TD</td>
-        <td class="border border-blue-600">Lng</td>
-        <td class="border border-blue-600">1st</td>
-        <td class="border border-blue-600">1st%</td>
-        <td class="border border-blue-600">20+</td>
-        <td class="border border-blue-600">40+</td>
-        <td class="border border-blue-600">FUM</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="flex flex-row px-2 mb-5">
+    <form phx-change="filter_by_name">
+      <input name="query" type="text" class="rounded-md border border-gray-300 py-3 px-5 focus:outline-none focus:ring-3 focus:border-purple-400" placeholder="Type to filter by name..." value="<%= @filter_by_name.query %>">
+    </form>
+  </div>
+  <div class="flex flex-col">
+    <div class="my-2 overflow-x-auto sm:-mx-6 lg:px-8">
+      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-purple-800">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Team</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Position</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts Per Game Average</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Total Rushing Yards", :yards_total, @options)%></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Average Yards Per Attempt</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Yards Per Game</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Total Rushing Touchdowns", :touchdowns, @options)%></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Longest Rush", :longest_rush_value, @options)%></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Downs</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Down Percentage</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing 20+ Yards Each</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing 40+ Yards Each</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Fumbles</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for player <- @players do %>
+              <tr class="bg-white">
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-gray-900 text-lg"><%= player.name %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.team %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.position %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.attempts %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.attempts_per_game %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_total %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.rushing_average %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_per_game %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.touchdowns %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.longest_rush_value %>
+                  <%= if player.longest_rush_touchdown do %>
+                    <span class="text-red-600">T</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.first_downs %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.first_downs_percentage %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_20 %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_40 %></td>
+                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.fumbles %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div> 
+  </div>
 </section>

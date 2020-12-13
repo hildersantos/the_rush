@@ -17,7 +17,7 @@ defmodule TheRushWeb.Router do
   scope "/", TheRushWeb do
     pipe_through :browser
 
-    live "/", HomeLive, :index
+    live "/", HomeLive
   end
 
   # Other scopes may use custom stacks.

@@ -161,4 +161,45 @@ defmodule TheRush.PlayersTest do
 
     assert [player_c] == Players.all(options)
   end
+
+  test "all/1 with search query returns results" do
+    player_adam = player_fixture(name: "Adam")
+    player_bruno = player_fixture(name: "Bruno")
+    player_colling = player_fixture(name: "Collin")
+    player_delucca = player_fixture(name: "De_Lucca")
+    player_emagic = player_fixture(name: "E-magic")
+
+    assert [
+             player_adam,
+             player_bruno,
+             player_colling,
+             player_delucca,
+             player_emagic
+           ] ==
+             Players.all(
+               pagination: %{page: 1, per_page: 10},
+               sort: %{sort_by: :name, sort_order: :asc}
+             )
+
+    assert [player_adam] ==
+             Players.all(
+               pagination: %{page: 1, per_page: 10},
+               sort: %{sort_by: :name, sort_order: :asc},
+               filter_by_name: "Ada"
+             )
+
+    assert [player_delucca] ==
+             Players.all(
+               pagination: %{page: 1, per_page: 10},
+               sort: %{sort_by: :name, sort_order: :asc},
+               filter_by_name: "De_"
+             )
+
+    assert [player_emagic] ==
+             Players.all(
+               pagination: %{page: 1, per_page: 10},
+               sort: %{sort_by: :name, sort_order: :asc},
+               filter_by_name: "E-"
+             )
+  end
 end
