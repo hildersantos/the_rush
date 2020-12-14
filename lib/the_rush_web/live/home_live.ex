@@ -26,56 +26,11 @@ defmodule TheRushWeb.HomeLive do
       filter_by_name: %{
         query: nil,
         debouncer_reference: nil
-      }
+      },
+      max_page: calculate_max_page(@per_page)
     ]
 
     {:ok, assign(socket, assigns), temporary_assigns: [players: nil]}
-  end
-
-  @impl true
-  def handle_event("filter_by_name", %{"query" => query}, socket) do
-    # Let's store the query in the socket, so we can use it later
-    # when the debouncer timer finishes
-    query = String.trim(query)
-    socket = assign(socket, :filter_by_name, %{socket.assigns.filter_by_name | query: query})
-
-    # Store the timeout in the socket
-    debouncer_reference = socket.assigns.filter_by_name.debouncer_reference
-
-    # Cancel the timer if exists
-    if not is_nil(debouncer_reference) do
-      Process.cancel_timer(debouncer_reference)
-    end
-
-    # Assigns a reference to the timer in the socket
-    socket =
-      assign(socket, :filter_by_name, %{
-        socket.assigns.filter_by_name
-        | debouncer_reference: Process.send_after(self(), :filter_table, @debouncer_timeout)
-      })
-
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_info(:filter_table, socket) do
-    # Filter table based on filter_by_name.query
-    options = socket.assigns.options
-    pagination_opts = %{page: options.page, per_page: options.per_page}
-    sort_opts = %{sort_by: options.sort_by, sort_order: options.sort_order}
-
-    socket =
-      assign(
-        socket,
-        :players,
-        Players.all(
-          pagination: pagination_opts,
-          sort: sort_opts,
-          filter_by_name: socket.assigns.filter_by_name.query
-        )
-      )
-
-    {:noreply, socket}
   end
 
   @impl true
@@ -95,13 +50,61 @@ defmodule TheRushWeb.HomeLive do
           pagination: pagination_opts,
           sort: sort_opts,
           filter_by_name: socket.assigns.filter_by_name.query
-        )
+        ),
+      max_page: calculate_max_page(per_page, filter_by_name: socket.assigns.filter_by_name.query)
     ]
 
     {:noreply, assign(socket, assigns)}
   end
 
-  defp sort(socket, text, sort_by, options) do
+  @impl true
+  def handle_event("filter_by_name", %{"query" => query}, socket) do
+    # Let's store the query in the socket, so we can use it later
+    # when the debouncer timer finishes
+    socket =
+      assign(socket, :filter_by_name, %{socket.assigns.filter_by_name | query: String.trim(query)})
+
+    # Store the timeout in the socket
+    debouncer_reference = socket.assigns.filter_by_name.debouncer_reference
+
+    # Cancel the timer if exists
+    debouncer_reference && Process.cancel_timer(debouncer_reference)
+
+    # Assigns a reference to the timer in the socket
+    socket =
+      assign(socket, :filter_by_name, %{
+        socket.assigns.filter_by_name
+        | debouncer_reference: Process.send_after(self(), :filter_table, @debouncer_timeout)
+      })
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:filter_table, socket) do
+    # Filter table based on filter_by_name.query
+    %{per_page: per_page, sort_by: sort_by, sort_order: sort_order} = socket.assigns.options
+    query = socket.assigns.filter_by_name.query
+
+    pagination_opts = %{page: 1, per_page: per_page}
+    sort_opts = %{sort_by: sort_by, sort_order: sort_order}
+
+    socket =
+      assign(
+        socket,
+        players:
+          Players.all(
+            filter_by_name: query,
+            pagination: pagination_opts,
+            sort: sort_opts
+          ),
+        max_page: calculate_max_page(per_page, filter_by_name: query)
+      )
+
+    {:noreply, socket}
+  end
+
+  defp sort_link(socket, text, sort_by, options) do
     text =
       if sort_by == options.sort_by do
         raw(text <> sort_icon(options.sort_order))
@@ -120,6 +123,38 @@ defmodule TheRushWeb.HomeLive do
           per_page: options.per_page
         )
     )
+  end
+
+  defp page_link(socket, text, page, options) do
+    %{sort_by: sort_by, sort_order: sort_order, per_page: per_page} = options
+
+    default_classes = ~w{text-sm py-2 px-4 flex-1 border-r border-gray-300 text-center}
+
+    classes =
+      if page == options.page do
+        ["bg-purple-800 text-white" | default_classes]
+      else
+        ["bg-white text-gray-800" | default_classes]
+      end
+
+    live_patch(text,
+      to:
+        Routes.live_path(
+          socket,
+          __MODULE__,
+          sort_by: sort_by,
+          sort_order: sort_order,
+          page: page,
+          per_page: per_page
+        ),
+      class: Enum.join(classes, " ")
+    )
+  end
+
+  defp calculate_max_page(per_page, criteria \\ []) do
+    total_count = Players.total_count(criteria)
+
+    floor(total_count / per_page) + 1
   end
 
   defp maybe_toggle_sort_order(sort_by, options)

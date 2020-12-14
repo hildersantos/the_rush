@@ -74,6 +74,12 @@ defmodule TheRush.Players.Player do
       where: ilike(q.name, ^search_query)
   end
 
+  @doc false
+  def count(query) do
+    from q in query,
+      select: count()
+  end
+
   defp prepare_input(input) do
     text =
       input

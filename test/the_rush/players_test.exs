@@ -202,4 +202,12 @@ defmodule TheRush.PlayersTest do
                filter_by_name: "E-"
              )
   end
+
+  test "count/0 returns the total number of players" do
+    Enum.each(~w{a b c d e f g h i}, fn name ->
+      player_fixture(%{name: name})
+    end)
+
+    assert 9 == Players.total_count()
+  end
 end
