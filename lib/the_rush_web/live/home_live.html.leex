@@ -15,11 +15,11 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Position</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts Per Game Average</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Total Rushing Yards", :yards_total, @options)%></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Total Rushing Yards", :yards_total, @options) %></th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Average Yards Per Attempt</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Yards Per Game</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Total Rushing Touchdowns", :touchdowns, @options)%></th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort(@socket, "Longest Rush", :longest_rush_value, @options)%></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Total Rushing Touchdowns", :touchdowns, @options) %></th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Longest Rush", :longest_rush_value, @options) %></th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Downs</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Down Percentage</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing 20+ Yards Each</th>

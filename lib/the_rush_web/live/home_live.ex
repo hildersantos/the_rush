@@ -101,7 +101,7 @@ defmodule TheRushWeb.HomeLive do
     {:noreply, assign(socket, assigns)}
   end
 
-  defp sort(socket, text, sort_by, options) do
+  defp sort_link(socket, text, sort_by, options) do
     text =
       if sort_by == options.sort_by do
         raw(text <> sort_icon(options.sort_order))
