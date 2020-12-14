@@ -9,30 +9,30 @@ defmodule TheRush.CsvEncoder do
   Encodes a list of players and return its results
   """
   def encode_and_serve(criteria \\ []) do
-    csv_header =
-      [
-        "Name",
-        "Team",
-        "Position",
-        "Rushing Attempts Per Game Average",
-        "Rushing Attempts",
-        "Total Rushing Yards",
-        "Rushing Average Yards Per Attempt",
-        "Rushing Yards Per Game",
-        "Total Rushing Touchdowns",
-        "Longest Rush",
-        "Rushing First Touchdowns",
-        "Rushing First Down Percentage",
-        "Rushing 20+ Yards Each",
-        "Rushing 40+ Yards Each",
-        "Rushing Fumbles",
-      ]
+    csv_header = [
+      "Name",
+      "Team",
+      "Position",
+      "Rushing Attempts Per Game Average",
+      "Rushing Attempts",
+      "Total Rushing Yards",
+      "Rushing Average Yards Per Attempt",
+      "Rushing Yards Per Game",
+      "Total Rushing Touchdowns",
+      "Longest Rush",
+      "Rushing First Touchdowns",
+      "Rushing First Down Percentage",
+      "Rushing 20+ Yards Each",
+      "Rushing 40+ Yards Each",
+      "Rushing Fumbles"
+    ]
 
     results =
       criteria
       |> Players.all()
       |> Enum.map(fn entry ->
         longest_rush_value = Integer.to_string(entry.longest_rush_value)
+
         longest_rush =
           (entry.longest_rush_touchdown && longest_rush_value <> "T") || longest_rush_value
 
