@@ -1,57 +1,10 @@
 defmodule TheRush.PlayersTest do
-  alias TheRush.Players
+  alias TheRush.{Players, PlayerFixture}
   import Mox
   use TheRush.DataCase
 
   setup :set_mox_from_context
   setup :verify_on_exit!
-
-  @valid_params %{
-    name: "Silvio Santos",
-    team: "SBT",
-    position: "RB",
-    attempts: 2,
-    attempts_per_game: 2.0,
-    yards_total: 7,
-    rushing_average: 3.5,
-    yards_per_game: 7.0,
-    touchdowns: 0,
-    longest_rush_value: 7,
-    longest_rush_touchdown: false,
-    first_downs: 0,
-    first_downs_percentage: 0,
-    yards_20: 0,
-    yards_40: 0,
-    fumbles: 0
-  }
-
-  @invalid_params %{
-    name: nil,
-    team: nil,
-    position: nil,
-    attempts: nil,
-    attempts_per_game: nil,
-    yards_total: nil,
-    rushing_average: nil,
-    yards_per_game: nil,
-    touchdowns: nil,
-    longest_rush_value: nil,
-    longest_rush_touchdown: "bogus",
-    first_downs: nil,
-    first_downs_percentage: nil,
-    yards_20: nil,
-    yards_40: nil,
-    fumbles: nil
-  }
-
-  def player_fixture(attrs \\ %{}) do
-    {:ok, player} =
-      attrs
-      |> Enum.into(@valid_params)
-      |> Players.create()
-
-    player
-  end
 
   test "build_list/0 returns valid list of players" do
     # Testing with valid JSON entries should return them all
@@ -136,22 +89,24 @@ defmodule TheRush.PlayersTest do
   end
 
   test "create/1 with valid params creates a player" do
-    {:ok, player} = Players.create(@valid_params)
+    valid_params = PlayerFixture.valid_params()
+    {:ok, player} = Players.create(valid_params)
 
     assert player.name == "Silvio Santos"
     assert player.team == "SBT"
   end
 
   test "create/1 with invalid params creates returns error" do
-    assert {:error, changeset} = Players.create(@invalid_params)
+    invalid_params = PlayerFixture.invalid_params()
+    assert {:error, changeset} = Players.create(invalid_params)
 
     refute changeset.valid?
   end
 
   test "all/1 with pagination and sort returns paginated and sorted entries" do
-    player_c = player_fixture(name: "C")
-    player_fixture(name: "A")
-    player_fixture(name: "B")
+    player_c = PlayerFixture.new(name: "C")
+    PlayerFixture.new(name: "A")
+    PlayerFixture.new(name: "B")
 
     # Get the entry at the third page (should be player "C")
     options = [
@@ -163,11 +118,11 @@ defmodule TheRush.PlayersTest do
   end
 
   test "all/1 with search query returns results" do
-    player_adam = player_fixture(name: "Adam")
-    player_bruno = player_fixture(name: "Bruno")
-    player_colling = player_fixture(name: "Collin")
-    player_delucca = player_fixture(name: "De_Lucca")
-    player_emagic = player_fixture(name: "E-magic")
+    player_adam = PlayerFixture.new(name: "Adam")
+    player_bruno = PlayerFixture.new(name: "Bruno")
+    player_colling = PlayerFixture.new(name: "Collin")
+    player_delucca = PlayerFixture.new(name: "De_Lucca")
+    player_emagic = PlayerFixture.new(name: "E-magic")
 
     assert [
              player_adam,
@@ -205,7 +160,7 @@ defmodule TheRush.PlayersTest do
 
   test "count/0 returns the total number of players" do
     Enum.each(~w{a b c d e f g h i}, fn name ->
-      player_fixture(%{name: name})
+      PlayerFixture.new(%{name: name})
     end)
 
     assert 9 == Players.total_count()
