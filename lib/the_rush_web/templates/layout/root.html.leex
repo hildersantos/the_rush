@@ -9,14 +9,12 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
-    <div class="antialiased bg-gray-200 pt-10 pb-20">
+  <body class="antialiased bg-gray-200 pt-10 pb-20">
       <header>
         <div class="container mx-auto pb-10">
           <h1 class="text-4xl text-center text-gray-700 font-bold">theRush</h1>
         </div>
       </header>
       <%= @inner_content %>
-    </div>
   </body>
 </html>
