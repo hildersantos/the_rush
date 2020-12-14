@@ -1,8 +1,16 @@
 <section class="container mx-auto">
-  <div class="flex flex-row px-2 mb-5">
+  <div class="flex flex-row justify-between px-2 mb-5">
     <form phx-change="filter_by_name">
       <input name="query" type="text" class="rounded-md border border-gray-300 py-3 px-5 focus:outline-none focus:ring-3 focus:border-purple-400" placeholder="Type to filter by name..." value="<%= @filter_by_name.query %>">
     </form>
+
+    <%= form_for :criteria, Routes.csv_path(TheRushWeb.Endpoint, :create), fn f -> %>
+      <%= hidden_input f, :sort_by, value: @options.sort_by %>
+      <%= hidden_input f, :sort_order, value: @options.sort_order %>
+      <%= hidden_input f, :filter_by_name, value: @filter_by_name.query %>
+      <%= submit "Download CSV", class: "rounded-md bg-blue-600 text-white py-3 px-3 justify-self-end" %>
+  <% end %>
+
   </div>
   <div class="flex flex-col">
     <div class="my-2 overflow-x-auto sm:-mx-6 lg:px-8">

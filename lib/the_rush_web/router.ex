@@ -18,6 +18,7 @@ defmodule TheRushWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
+    post "/csv", CsvController, :create
   end
 
   # Other scopes may use custom stacks.
