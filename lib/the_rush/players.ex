@@ -23,7 +23,38 @@ defmodule TheRush.Players do
   Get players sorted and/or paginated
   """
   def all(criteria) do
-    Enum.reduce(criteria, Player, fn
+    Player
+    |> build_query(criteria)
+    |> Repo.all()
+  end
+
+  @doc """
+  Returns the total number of player entries.
+  """
+  def total_count do
+    Player
+    |> count_results()
+    |> Repo.one()
+  end
+
+  def total_count(criteria) do
+    Player
+    |> build_query(criteria)
+    |> count_results()
+    |> Repo.one()
+  end
+
+  @doc """
+  Build the initial list of players based in a JSON file.
+  """
+  def build_list do
+    fetch_json()
+    |> extract_from_json()
+    |> Enum.reject(&(&1 == %{}))
+  end
+
+  defp build_query(query, criteria) do
+    Enum.reduce(criteria, query, fn
       {:pagination, %{page: page, per_page: per_page}}, query ->
         Player.paginate(query, page, per_page)
 
@@ -39,16 +70,10 @@ defmodule TheRush.Players do
       {:filter_by_name, search_query}, query ->
         Player.filter_by_name(query, search_query)
     end)
-    |> Repo.all()
   end
 
-  @doc """
-  Build the initial list of players based in a JSON file.
-  """
-  def build_list do
-    fetch_json()
-    |> extract_from_json()
-    |> Enum.reject(&(&1 == %{}))
+  defp count_results(query) do
+    Player.count(query)
   end
 
   defp fetch_json do

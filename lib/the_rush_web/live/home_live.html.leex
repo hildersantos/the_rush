@@ -55,6 +55,19 @@
         </table>
       </div>
     </div>
-    </div> 
+    <div class="pagination py-2 m-2">
+      <div class="inline-flex shadow rounded-lg overflow-hidden">
+        <%= if(@options.page > 1) do %>
+          <%= page_link(@socket, "Previous", @options.page - 1, @options) %>
+        <% end %>
+        <%= for page <- 1..@max_page, @max_page > 1 do %>
+          <%= page_link(@socket, page, page, @options) %>
+        <% end %>
+        <%= if @options.page < @max_page do %>
+          <%= page_link(@socket, "Next", @options.page + 1, @options) %>
+        <% end %>
+      </div>
+    </div>
+  </div> 
   </div>
 </section>
