@@ -6,14 +6,10 @@ defmodule TheRushWeb.HomeLive do
 
   alias TheRush.Players
 
-  @per_page 50
-  # Set a default timeout for the debouncer function, in ms
-  @debouncer_timeout 500
-
   @impl true
   def mount(_params, _session, socket) do
     # Default values
-    pagination_opts = %{page: 1, per_page: @per_page}
+    pagination_opts = %{page: 1, per_page: per_page()}
     sort_opts = %{sort_by: :name, sort_order: :asc}
 
     assigns = [
@@ -27,7 +23,7 @@ defmodule TheRushWeb.HomeLive do
         query: nil,
         debouncer_reference: nil
       },
-      max_page: calculate_max_page(@per_page)
+      max_page: calculate_max_page(per_page())
     ]
 
     {:ok, assign(socket, assigns), temporary_assigns: [players: nil]}
@@ -36,7 +32,7 @@ defmodule TheRushWeb.HomeLive do
   @impl true
   def handle_params(params, _uri, socket) do
     page = String.to_integer(params["page"] || "1")
-    per_page = String.to_integer(params["per_page"] || "#{@per_page}")
+    per_page = String.to_integer(params["per_page"] || "#{per_page()}")
     sort_by = (params["sort_by"] || "name") |> String.to_atom()
     sort_order = (params["sort_order"] || "asc") |> String.to_atom()
 
@@ -74,7 +70,7 @@ defmodule TheRushWeb.HomeLive do
     socket =
       assign(socket, :filter_by_name, %{
         socket.assigns.filter_by_name
-        | debouncer_reference: Process.send_after(self(), :filter_table, @debouncer_timeout)
+        | debouncer_reference: Process.send_after(self(), :filter_table, debouncer_timeout())
       })
 
     {:noreply, socket}
@@ -180,5 +176,15 @@ defmodule TheRushWeb.HomeLive do
       <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
       </svg>
     """
+  end
+
+  defp per_page do
+    System.get_env("RESULTS_PER_PAGE", "20")
+    |> String.to_integer()
+  end
+
+  defp debouncer_timeout do
+    System.get_env("DEBOUNCER_TIMEOUT", "500")
+    |> String.to_integer()
   end
 end
