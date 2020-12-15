@@ -6,9 +6,11 @@ defmodule TheRushWeb.HomeLive do
 
   alias TheRush.Players
   alias TheRush.Players.UserInterfaceFields, as: Fields
+
   alias TheRushWeb.{
     DownloadCsvComponent,
     FilterNameComponent,
+    PaginationComponent,
     TableComponent
   }
 
@@ -111,39 +113,11 @@ defmodule TheRushWeb.HomeLive do
     Fields.for_player()
   end
 
-
-  defp page_link(socket, text, page, options) do
-    %{sort_by: sort_by, sort_order: sort_order, per_page: per_page} = options
-
-    default_classes = ~w{text-sm py-2 px-4 flex-1 border-r border-gray-300 text-center}
-
-    classes =
-      if page == options.page do
-        ["bg-purple-800 text-white" | default_classes]
-      else
-        ["bg-white text-gray-800" | default_classes]
-      end
-
-    live_patch(text,
-      to:
-        Routes.live_path(
-          socket,
-          __MODULE__,
-          sort_by: sort_by,
-          sort_order: sort_order,
-          page: page,
-          per_page: per_page
-        ),
-      class: Enum.join(classes, " ")
-    )
-  end
-
   defp calculate_max_page(per_page, criteria \\ []) do
     total_count = Players.total_count(criteria)
 
     floor(total_count / per_page) + 1
   end
-
 
   defp per_page do
     System.get_env("RESULTS_PER_PAGE", "20")
