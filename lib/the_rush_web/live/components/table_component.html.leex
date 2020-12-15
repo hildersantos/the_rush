@@ -1,0 +1,31 @@
+<div class="my-2 sm:-mx-6 lg:px-8">
+  <div class="shadow overflow-x-auto border-b border-gray-200 sm:rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-purple-800">
+        <tr>
+        <%= for {key, attrs} <- @fields do %>
+        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+          <%= 
+# Checks if the column should be sorted or not
+if attrs.sort_by do %>
+            <%= sort_link(@socket, attrs.label, key, @current_sort_by, @current_sort_order, @current_page, @current_per_page) %>
+            <% else %>
+            <%= attrs.label %>
+          <% end %>
+        </th>
+        <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for entry <- @entries do %>
+          <tr class="bg-white">
+            <%= for {key, attrs} <- @fields do %>
+              <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-gray-900 text-sm"><%= Map.get(entry, key) %><%= concatenations(entry, attrs) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
