@@ -5,6 +5,10 @@ defmodule TheRushWeb.HomeLive do
   use TheRushWeb, :live_view
 
   alias TheRush.Players
+  alias TheRushWeb.{
+    DownloadCsvComponent,
+    FilterNameComponent
+  }
 
   @impl true
   def mount(_params, _session, socket) do
