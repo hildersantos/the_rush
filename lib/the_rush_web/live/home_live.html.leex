@@ -7,55 +7,14 @@
 
 
   <div class="flex flex-col">
-    <div class="my-2 sm:-mx-6 lg:px-8">
-      <div class="shadow overflow-x-auto border-b border-gray-200 sm:rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-purple-800">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Team</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Position</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts Per Game Average</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Attempts</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Total Rushing Yards", :yards_total, @options) %></th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Average Yards Per Attempt</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Yards Per Game</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Total Rushing Touchdowns", :touchdowns, @options) %></th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"><%= sort_link(@socket, "Longest Rush", :longest_rush_value, @options) %></th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Downs</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing First Down Percentage</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing 20+ Yards Each</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing 40+ Yards Each</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Rushing Fumbles</th>
-            </tr>
-          </thead>
-          <tbody>
-            <%= for player <- @players do %>
-              <tr class="bg-white">
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-gray-900 text-lg"><%= player.name %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.team %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.position %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.attempts %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.attempts_per_game %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_total %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.rushing_average %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_per_game %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.touchdowns %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.longest_rush_value %>
-                  <%= if player.longest_rush_touchdown do %>
-                    <span class="text-red-600">T</span>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.first_downs %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.first_downs_percentage %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_20 %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.yards_40 %></td>
-                <td class="px-6 py-4 whitespace-nowrap border-t border-dashed border-gray-200 text-sm"><%= player.fumbles %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
+  <%= live_component @socket, TableComponent,
+fields: player_fields(),
+current_sort_by: @options.sort_by,
+current_sort_order: @options.sort_order,
+current_page: @options.page,
+current_per_page: @options.per_page,
+entries: @players
+%>
     </div>
     <div class="pagination py-2 my-6 mx-2">
       <div class="inline-flex flex-wrap shadow rounded-lg overflow-hidden">
