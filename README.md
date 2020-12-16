@@ -33,10 +33,11 @@ After exporting the environment variables to your session, run the following com
 Bear in mind that if it's the first time you are running the application, you should run the migrations and seed the database with the contents of `rushing.json`. To do that, with the application running, run the following commands:
 
 ```
-$ docker exec -it <app_container_name_or_id> entrypoint migrate # Run the
-migrations
-$ docker exec -it <app_container_name_or_id> entrypoint seed # Seeds the
-database
+# Run the migrations
+$ docker exec -it <app_container_name_or_id> entrypoint migrate
+
+# Seeds the database
+$ docker exec -it <app_container_name_or_id> entrypoint seed
 ```
 
 You only need to do that once.
