@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :the_rush,
   ecto_repos: [TheRush.Repo]

@@ -4,7 +4,6 @@ defmodule TheRush.Players.Player do
   """
   use Ecto.Schema
   import Ecto.{Changeset, Query}
-  import TheRush.Helpers
 
   @all_fields ~w{
     name

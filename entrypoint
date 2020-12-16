@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Helper for running commands on release
+
+COMMAND=$1
+
+# Options:
+# -e: exits on non-zero exits
+# -u: exists if variables are not set
+# -o pipefail: exists on pipeline fails
+set -euo pipefail
+
+echo "Launching command: $@"
+
+case "$COMMAND" in
+  "help")
+    exec /app/bin/the_rush
+    ;;
+    
+  "start")
+    exec /app/bin/the_rush "$@"
+    ;;
+
+  "remote_iex")
+    exec /app/bin/the_rush "$@"
+    ;;
+
+  "remote")
+    exec /app/bin/the_rush "$@"
+    ;;
+
+  "migrate")
+    exec /app/bin/the_rush eval "TheRush.Release.migrate/0"
+    ;;
+
+  "seed")
+    exec /app/bin/the_rush eval "TheRush.Release.seed/0"
+    ;;
+  *)
+    exec "$@"
+    ;;
+esac
