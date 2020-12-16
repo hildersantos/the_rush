@@ -63,7 +63,7 @@ defmodule TheRushWeb.Endpoint do
 
     [
       url: [
-        host: (env["THERUSH_HOSTNAME"] || "localhost" )
+        host: env["THERUSH_HOSTNAME"] || "localhost"
       ],
       http: [
         port: String.to_integer(env["THERUSH_PORT"] || "4004"),
@@ -71,7 +71,7 @@ defmodule TheRushWeb.Endpoint do
           socket_opts: [:inet6]
         ]
       ],
-      secret_key_base: (env["THERUSH_SECRET"] || raise("THERUSH_SECRET env variable not found")),
+      secret_key_base: env["THERUSH_SECRET"] || raise("THERUSH_SECRET env variable not found"),
       server: true
     ]
   end

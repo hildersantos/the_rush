@@ -34,7 +34,7 @@ defmodule TheRush.Release do
   defp seeds_path(repo), do: priv_path_for(repo, "seeds.exs")
 
   defp priv_path_for(repo, filename) do
-    repo_underscore = 
+    repo_underscore =
       repo
       |> Module.split()
       |> List.last()
