@@ -53,7 +53,7 @@ defmodule TheRushWeb.Endpoint do
   plug TheRushWeb.Router
 
   def init(_type, config) do
-    config = Keyword.merge(config, runtime_config())
+    config = Keyword.merge(config, runtime_config(), &update_if_nil/3)
 
     {:ok, config}
   end
@@ -71,8 +71,12 @@ defmodule TheRushWeb.Endpoint do
           socket_opts: [:inet6]
         ]
       ],
-      secret_key_base: env["THERUSH_SECRET"] || raise("THERUSH_SECRET env variable not found"),
+      secret_key_base: env["THERUSH_SECRET"],
       server: true
     ]
   end
+
+  # Update keys only if they don't exist
+  defp update_if_nil(_k, v1, nil), do: v1
+  defp update_if_nil(_k, _, v2), do: v2
 end
