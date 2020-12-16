@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.2
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+  app:
+    build: .
+    ports:
+      - "$THERUSH_PORT:$THERUSH_PORT"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOSTNAME=postgres
+      - MIX_ENV=prod
+      - THERUSH_SECRET=$THERUSH_SECRET
+      - THERUSH_PORT=$THERUSH_PORT
+      - THERUSH_HOSTNAME=$THERUSH_HOSTNAME
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_POOL=$DB_POOL
