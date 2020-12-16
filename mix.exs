@@ -10,7 +10,8 @@ defmodule TheRush.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: releases()
     ]
   end
 
@@ -66,6 +67,16 @@ defmodule TheRush.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+    ]
+  end
+
+  defp releases() do
+    [
+      the_rush: [
+        applications: [runtime_tools: :permanent],
+        include_erts: Mix.env() == :prod,
+        include_executables_for: [:unix]
+      ]
     ]
   end
 end

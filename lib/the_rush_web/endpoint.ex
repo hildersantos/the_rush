@@ -51,4 +51,28 @@ defmodule TheRushWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug TheRushWeb.Router
+
+  def init(_type, config) do
+    config = Keyword.merge(config, runtime_config())
+
+    {:ok, config}
+  end
+
+  def runtime_config do
+    env = System.get_env()
+
+    [
+      url: [
+        host: (env["THERUSH_HOSTNAME"] || "localhost" )
+      ],
+      http: [
+        port: String.to_integer(env["THERUSH_PORT"] || "4004"),
+        transport_options: [
+          socket_opts: [:inet6]
+        ]
+      ],
+      secret_key_base: (env["THERUSH_SECRET"] || raise("THERUSH_SECRET env variable not found")),
+      server: true
+    ]
+  end
 end
